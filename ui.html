@@ -1,0 +1,86 @@
+<div style="background-color: #0078D4;">
+  <h2 style="font-family: 'Segoe UI', sans-serif; padding-top: 10px; padding-left: 10px; color: #ffffff;">Microsoft Ink</h2>
+  <p style="margin-top: -20px; color: rgb(201, 196, 196); margin-bottom: 20px; font-family: 'Segoe UI', sans-serif; padding-bottom: 10px; padding-left: 10px; font-size: 14px;">Powered by GPT-5 intelligence</p>
+</div>
+<div style="margin-bottom: 15px; font-family: 'Segoe UI', sans-serif; font-size: 15px; margin-left: 5px;">Please upload your internal documentation for additional context.</div>
+<input type="file" id="fileUpload" style="margin-bottom: 15px; font-family: 'Segoe UI', sans-serif; font-size: 14px; margin-left: 5px;" />
+<div id="loading-container">
+  <div class="loader"></div>
+  <span class="loading-text">Generating content, please wait...</span>
+</div>
+<div id="success" style="display: none; margin-top: 10px; margin-left: 5px;">
+  <span style="font-family: 'Segoe UI', sans-serif; font-size: 15px;">Content updated successfully!</span>
+</div>
+
+<style>
+
+#loading-container {
+  display: none;
+  margin-top: 10px;
+  text-align: center;
+  margin-left: 5px;
+}
+
+.loader {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  vertical-align: middle;
+
+}
+
+.loading-text {
+  display: inline-block;
+  margin-left: 15px;
+  vertical-align: middle;
+  margin-top: 2px;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 15px;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+</style>
+<div id="text2" style="font-family: 'Segoe UI', sans-serif; font-size: 15px; margin-left: 5px; margin-top: 50px;">Please select the part of the file that you need content for.</div>
+<div id="button-container" style="margin-top: 10px; margin-left: 5px;">
+  <button id="submit" style="font-family: 'Segoe UI', sans-serif; font-size: 14px;" !disabled>Generate Content</button>
+  <button id="cancel" style="font-family: 'Segoe UI', sans-serif; font-size: 14px;">Cancel</button>
+</div>
+<script>
+
+document.getElementById('submit').onclick = () => {
+  parent.postMessage({ pluginMessage: { type: 'submit' } }, '*');
+  document.getElementById('submit').disabled = true;
+  document.getElementById('success').style.display = 'none';
+  document.getElementById('loading-container').style.display = 'inline-flex';
+  document.getElementById('text2').style.marginTop = '20px';
+}
+
+document.getElementById('cancel').onclick = () => {
+  parent.postMessage({ pluginMessage: { type: 'cancel' } }, '*')
+}
+
+
+onmessage = (event) => {
+  const msg = event.data.pluginMessage;
+
+  if (msg.type === 'fetch-success') {
+    document.getElementById('loading-container').style.display = 'none';
+    document.getElementById('success').style.display = 'block';
+    document.getElementById('submit').disabled = !(document.getElementById('submit').disabled);
+  }
+};
+
+</script>
